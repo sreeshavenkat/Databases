@@ -54,10 +54,88 @@ public class TestTable {
   /**
    * Test sample, do not modify.
    */
+  @Test(expected = DatabaseException.class)
+  @Category(StudentTest.class)
+  public void testLargeRetrieve() throws DatabaseException {
+    Record input = TestUtils.createRecordWithAllTypes();
+    RecordID rid = table.addRecord(input.getValues());
+    table.getRecord(new RecordID(3, 3));
+  }
+
   @Test
   @Category(StudentTest.class)
-  public void testSample() {
-    assertEquals(true, true); // Do not actually write a test like this!
+  public void testString() throws DatabaseException{
+    Schema stringSchema = TestUtils.createSchemaOfString(3);
+    Table stringTable = createTestTable(stringSchema, "stringTable");
+    int numEntries = stringTable.getNumEntriesPerPage();
+    stringTable.close();
+    assertEquals("NumEntries per page is correct", 1304, numEntries);
+  }
+
+  @Test(expected = DatabaseException.class)
+  @Category(StudentTest.class)
+  public void testInvalidDelete() throws DatabaseException {
+    table.deleteRecord(new RecordID(1, 1));
+  }
+
+  @Test
+  @Category(StudentTest.class)
+  public void testTableNumEntriesInt() throws DatabaseException {
+    Schema intSchema = TestUtils.createSchemaWithTwoInts();
+    Table intTable = createTestTable(intSchema, "intTable");
+    int numEntries = intTable.getNumEntriesPerPage();
+    intTable.close();
+    assertEquals(504, numEntries);
+  }
+
+  @Test
+  @Category(StudentTest.class)
+  public void testTableMultipleInsert() throws DatabaseException {
+    Record input = TestUtils.createRecordWithAllTypes();
+    Record input2 = TestUtils.createRecordWithAllTypesWithValue(2);
+    RecordID rid = table.addRecord(input.getValues());
+    RecordID rid2 = table.addRecord(input2.getValues());
+
+    // This is a new table, so it should be put into the first slot of the first page.
+    assertEquals(1, rid.getPageNum());
+    assertEquals(0, rid.getEntryNumber());
+
+    assertEquals(1, rid2.getPageNum());
+    assertEquals(1, rid2.getEntryNumber());
+
+    Record output = table.getRecord(rid);
+    Record output2 = table.getRecord(rid2);
+
+    assertEquals(input, output);
+    assertEquals(input2, output2);
+  }
+
+  @Test(expected = DatabaseException.class)
+  @Category(StudentTest.class)
+  public void testInvalidRetrieveAfterRemove() throws DatabaseException {
+    Record input = TestUtils.createRecordWithAllTypes();
+    RecordID rid = table.addRecord(input.getValues());
+    table.deleteRecord(rid);
+    table.getRecord(rid);
+  }
+
+  @Test(expected = DatabaseException.class)
+  @Category(StudentTest.class)
+  public void testInvalidUpdateAfterRemove() throws DatabaseException {
+    Record input = TestUtils.createRecordWithAllTypes();
+    RecordID rid = table.addRecord(input.getValues());
+    table.deleteRecord(rid);
+    table.updateRecord(input.getValues(), rid);
+  }
+
+  @Test
+  @Category(StudentTest.class)
+  public void testCheckAfterRemove() throws DatabaseException {
+    Record input = TestUtils.createRecordWithAllTypes();
+    RecordID rid = table.addRecord(input.getValues());
+    table.updateRecord(input.getValues(), rid);
+    table.deleteRecord(rid);
+    table.callCheck(rid);
   }
 
   @Test

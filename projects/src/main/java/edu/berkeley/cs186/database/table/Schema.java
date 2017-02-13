@@ -2,11 +2,11 @@ package edu.berkeley.cs186.database.table;
 
 import edu.berkeley.cs186.database.databox.*;
 
+import javax.xml.crypto.Data;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 /**
  * The Schema of a particular table.
  *
@@ -43,8 +43,24 @@ public class Schema {
    * @throws SchemaException if the values specified don't conform to this Schema
    */
   public Record verify(List<DataBox> values) throws SchemaException {
-    // TODO: implement me!
-    return null;
+    List<DataBox> fieldtypes = getFieldTypes();
+    boolean flag = true;
+    if (values.size() == fieldtypes.size()) {
+      for (int i = 0; i < values.size(); i++) {
+        DataBox v = values.get(i);
+        DataBox f = fieldtypes.get(i);
+        if (v.getClass().equals(f.getClass()) && v.getSize() == f.getSize()) {
+          continue;
+        } else {
+          throw new SchemaException("Values in DataBox have different size/type compared to columns in Schema.");
+        }
+      }
+    } else {
+        throw new SchemaException("Values in DataBox do not conform to this Schema.");
+    }
+
+    Record r = new Record(values);
+    return r;
   }
 
   /**
@@ -57,8 +73,13 @@ public class Schema {
    * @return the encoded record as a byte[]
    */
   public byte[] encode(Record record) {
-    // TODO: implement me!
-    return null;
+    List<DataBox> values = record.getValues();
+    ByteBuffer target = ByteBuffer.allocate(this.size);
+    for (int i = 0; i < values.size(); i++) {
+      byte[] byte_values = values.get(i).getBytes();
+      target.put(byte_values);
+    }
+    return target.array();
   }
 
   /**
@@ -69,8 +90,32 @@ public class Schema {
    * @return the decoded Record
    */
   public Record decode(byte[] input) {
-    // TODO: implement me!
-    return null;
+    List<DataBox> fieldtypes = getFieldTypes();
+    int from = 0;
+    List<DataBox> values = new ArrayList<DataBox>();
+    for (int i = 0; i < fieldtypes.size(); i++) {
+      int ft_size = fieldtypes.get(i).getSize();
+      byte[] range = Arrays.copyOfRange(input, from, from + ft_size);
+      from += ft_size;
+      if (fieldtypes.get(i).type().equals(DataBox.Types.BOOL)) {
+        DataBox db = new BoolDataBox(range);
+        values.add(db);
+      }
+      if (fieldtypes.get(i).type().equals(DataBox.Types.INT)) {
+        DataBox db = new IntDataBox(range);
+        values.add(db);
+      }
+      if (fieldtypes.get(i).type().equals(DataBox.Types.FLOAT)) {
+        DataBox db = new FloatDataBox(range);
+        values.add(db);
+      }
+      if (fieldtypes.get(i).type().equals(DataBox.Types.STRING)) {
+        DataBox db = new StringDataBox(range);
+        values.add(db);
+      }
+    }
+    Record r = new Record(values);
+    return r;
   }
 
   public int getEntrySize() {
