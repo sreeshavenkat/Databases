@@ -219,7 +219,7 @@ public class Table implements Iterable<Record>, Closeable {
     Record oldRecord = this.schema.decode(p.readBytes(offset, this.schema.getEntrySize()));
     this.writeBitToHeader(p, rid.getEntryNumber(), (byte) 0);
     this.freePages.add(p.getPageNum());
-    this.numRecords--;
+    this.numRecords -= 1;
     this.stats.removeRecord(oldRecord);
     return oldRecord;
   }
@@ -237,9 +237,8 @@ public class Table implements Iterable<Record>, Closeable {
     }
 
     Page p = this.allocator.fetchPage(rid.getPageNum());
-    int entrySize = this.schema.getEntrySize();
-    int offset = this.pageHeaderSize + (entrySize * rid.getEntryNumber());
-    byte[] pBytes = p.readBytes(offset, entrySize);
+    int offset = (this.schema.getEntrySize() * rid.getEntryNumber()) + this.pageHeaderSize;
+    byte[] pBytes = p.readBytes(offset, this.schema.getEntrySize());
 
     Record r = this.schema.decode(pBytes);
     return r;
