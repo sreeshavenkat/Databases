@@ -71,8 +71,23 @@ public class InnerNode extends BPlusNode {
      * @return the InnerEntry to be pushed/copied up to this InnerNode's parent
      * as a result of this InnerNode being split, null otherwise
      */
-    public InnerEntry insertBEntry(LeafEntry ent) {
-        // Implement me!
+    public InnerEntry insertBEntry(LeafEntry ent)
+    {
+        /* get correct leafNode */
+        int keyPage = findChildFromKey(ent.getKey());
+        BPlusNode child = getBPlusNode(getTree(), keyPage);
+        InnerEntry result = child.insertBEntry(ent);
+        if (result != null)
+            if (!hasSpace()) {
+                InnerEntry copiedNode = splitNode(result);
+                return copiedNode;
+            } else {
+                List<BEntry> allEntries = this.getAllValidEntries();
+                allEntries.add(ent);
+                Collections.sort(allEntries);
+                overwriteBNodeEntries(allEntries);
+                return null;
+            }
         return null;
     }
 
@@ -88,7 +103,18 @@ public class InnerNode extends BPlusNode {
      */
     @Override
     public InnerEntry splitNode(BEntry newEntry) {
-        // Implement me!
-        return null;
+        /* split inner node into two nodes, of length d and d */
+        InnerNode rightNode = new InnerNode(getTree());
+        List<BEntry> allEntries = this.getAllValidEntries();
+        allEntries.add(newEntry);
+        Collections.sort(allEntries);
+        int d = allEntries.size()/2;
+        this.overwriteBNodeEntries(allEntries.subList(0, d));
+        rightNode.overwriteBNodeEntries(allEntries.subList(d+1, allEntries.size()));
+        rightNode.setFirstChild(allEntries.get(d).getPageNum());
+
+        /* push up inner entry to parent */
+        InnerEntry innerEnt = new InnerEntry(allEntries.get(d).getKey(), rightNode.getPageNum());
+        return innerEnt;
     }
 }

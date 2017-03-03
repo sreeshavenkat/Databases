@@ -2,9 +2,11 @@ package edu.berkeley.cs186.database.index;
 
 import edu.berkeley.cs186.database.io.Page;
 import edu.berkeley.cs186.database.io.PageAllocator;
+import edu.berkeley.cs186.database.table.Record;
 import edu.berkeley.cs186.database.table.RecordID;
 import edu.berkeley.cs186.database.databox.*;
 
+import javax.xml.crypto.Data;
 import java.util.*;
 import java.nio.file.Paths;
 
@@ -128,7 +130,19 @@ public class BPlusTree {
      * @param rid the RecordID of the given key
      */
     public void insertKey(DataBox key, RecordID rid) {
-        // Implement me!
+        LeafEntry leafEntry = new LeafEntry(key, rid);
+        BPlusNode curr = BPlusNode.getBPlusNode(this, rootPageNum);
+        InnerEntry result = curr.insertBEntry(leafEntry);
+        if (result != null) {
+            /* create new root node, pointing to two child pages */
+            InnerNode newRoot = new InnerNode(this);
+            List<BEntry> lst = new ArrayList<BEntry>();
+            lst.add(result);
+            newRoot.overwriteBNodeEntries(lst);
+            newRoot.setFirstChild(rootPageNum);
+            int newRootPageNum = newRoot.getPageNum();
+            updateRoot(newRootPageNum);
+        }
     }
 
     /**
@@ -230,6 +244,12 @@ public class BPlusTree {
     private class BPlusIterator implements Iterator<RecordID> {
         // Implement me!
 
+        private BPlusTree tree;
+        private Stack<BPlusNode> nodeStack;
+        private int scanType;
+        private Iterator<RecordID> currIterator = null;
+        private DataBox lookupKey;
+        private LeafNode nodeStackLeaf;
         /**
          * Construct an iterator that performs a sorted scan on this BPlusTree
          * tree.
@@ -240,6 +260,11 @@ public class BPlusTree {
          */
         public BPlusIterator(BPlusNode root) {
             // Implement me!
+            this.nodeStack = new Stack<BPlusNode>();
+            this.tree = root.getTree();
+            this.nodeStack.push(root);
+            this.scanType = 0;
+            this.nodeStack = traverseStack(this.nodeStack);
         }
 
         /**
@@ -255,9 +280,41 @@ public class BPlusTree {
          * @param scan if true, do a range search; else, equality search
          */
         public BPlusIterator(BPlusNode root, DataBox key, boolean scan) {
-            // Implement me!
+            this.nodeStack = new Stack<BPlusNode>();
+            this.tree = root.getTree();
+            this.nodeStack.push(root);
+            this.lookupKey = key;
+            this.nodeStack = traverseStack(this.nodeStack);
+            /* range search */
+            if (scan) {
+                this.scanType = 1;
+            } else {
+                this.scanType = 2;
+            }
         }
 
+        public Stack<BPlusNode> traverseStack(Stack<BPlusNode> n_stack) {
+            while (!n_stack.empty()) {
+                if (n_stack.peek().isLeaf()) {
+                    break;
+                }
+                BPlusNode currNode = n_stack.pop();
+                InnerNode innerCurrNode = ((InnerNode)currNode);
+                int keyPage = innerCurrNode.getFirstChild();
+                BPlusNode firstChild = BPlusNode.getBPlusNode(this.tree, keyPage);
+                List<BEntry> entries = currNode.getAllValidEntries();
+                List<BPlusNode> entryList = new ArrayList<BPlusNode>();
+                entryList.add(firstChild);
+                for (BEntry e : entries) {
+                    entryList.add(BPlusNode.getBPlusNode(this.tree, e.getPageNum()));
+                }
+                Collections.reverse(entryList);
+                for (BPlusNode b : entryList) {
+                    n_stack.push(b);
+                }
+            }
+            return n_stack;
+        }
         /**
          * Confirm if iterator has more RecordIDs to return.
          *
@@ -266,7 +323,20 @@ public class BPlusTree {
          */
         public boolean hasNext() {
             // Implement me!
-            return false;
+            if (this.currIterator == null || !this.currIterator.hasNext()) {
+                while (!this.nodeStack.peek().isLeaf()) {
+                    this.nodeStack = traverseStack(this.nodeStack);
+                }
+                this.nodeStackLeaf = ((LeafNode) this.nodeStack.pop());
+                if (this.scanType == 0) {
+                    this.currIterator = this.nodeStackLeaf.scan();
+                } else if (this.scanType == 1) {
+                    this.currIterator = this.nodeStackLeaf.scanFrom(this.lookupKey);
+                } else if (this.scanType == 2) {
+                    this.currIterator = this.nodeStackLeaf.scanForKey(this.lookupKey);
+                }
+            }
+            return this.currIterator.hasNext();
         }
 
         /**
@@ -277,8 +347,10 @@ public class BPlusTree {
          * yield
          */
         public RecordID next() {
-            // Implement me!
-            return null;
+            if (!hasNext()) {
+                throw new NoSuchElementException("No more RecordIDs to yield");
+            }
+            return this.currIterator.next();
         }
 
         public void remove() {
