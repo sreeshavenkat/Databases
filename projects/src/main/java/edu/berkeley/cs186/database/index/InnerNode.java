@@ -83,7 +83,7 @@ public class InnerNode extends BPlusNode {
                 return copiedNode;
             } else {
                 List<BEntry> allEntries = this.getAllValidEntries();
-                allEntries.add(ent);
+                allEntries.add(result);
                 Collections.sort(allEntries);
                 overwriteBNodeEntries(allEntries);
                 return null;

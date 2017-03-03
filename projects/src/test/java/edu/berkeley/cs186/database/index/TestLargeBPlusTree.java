@@ -130,7 +130,6 @@ public class TestLargeBPlusTree {
                 int j = 0;
             }
         }
-        System.out.println(bp.getNumNodes());
         Iterator<RecordID> rids = bp.sortedScan();
         int expectedPageNum = 0;
         while (rids.hasNext()) {
@@ -138,8 +137,6 @@ public class TestLargeBPlusTree {
             if (rid.getPageNum() == 399) {
                 System.out.println("break");
             }
-            System.out.println(rid.getPageNum());
-            System.out.println(expectedPageNum);
             assertEquals(expectedPageNum, rid.getPageNum());
             expectedPageNum++;
         }
@@ -352,7 +349,6 @@ public class TestLargeBPlusTree {
                 bp.insertKey(new IntDataBox(k), new RecordID(k, 0));
             }
         }
-
         assertEquals(865, this.bp.getNumNodes());
 
         for (int k = 0; k < 250; k++) {

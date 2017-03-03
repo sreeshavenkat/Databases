@@ -324,16 +324,24 @@ public class BPlusTree {
         public boolean hasNext() {
             // Implement me!
             if (this.currIterator == null || !this.currIterator.hasNext()) {
-                while (!this.nodeStack.peek().isLeaf()) {
-                    this.nodeStack = traverseStack(this.nodeStack);
-                }
-                this.nodeStackLeaf = ((LeafNode) this.nodeStack.pop());
-                if (this.scanType == 0) {
-                    this.currIterator = this.nodeStackLeaf.scan();
-                } else if (this.scanType == 1) {
-                    this.currIterator = this.nodeStackLeaf.scanFrom(this.lookupKey);
-                } else if (this.scanType == 2) {
-                    this.currIterator = this.nodeStackLeaf.scanForKey(this.lookupKey);
+                if (!this.nodeStack.isEmpty()) {
+                    while (!this.nodeStack.peek().isLeaf()) {
+                        this.nodeStack = traverseStack(this.nodeStack);
+                    }
+                    this.nodeStackLeaf = ((LeafNode) this.nodeStack.pop());
+                    if (this.scanType == 0) {
+                        this.currIterator = this.nodeStackLeaf.scan();
+                    } else if (this.scanType == 1) {
+                        this.currIterator = this.nodeStackLeaf.scanFrom(this.lookupKey);
+                        if (!this.currIterator.hasNext()) {
+                            return hasNext();
+                        }
+                    } else if (this.scanType == 2) {
+                        this.currIterator = this.nodeStackLeaf.scanForKey(this.lookupKey);
+                        if (!this.currIterator.hasNext()) {
+                            return hasNext();
+                        }
+                    }
                 }
             }
             return this.currIterator.hasNext();
