@@ -46,15 +46,14 @@ public class LeafNode extends BPlusNode {
      */
     @Override
     public InnerEntry insertBEntry(LeafEntry ent) {
-        if (!hasSpace()) {
-            InnerEntry copiedNode = splitNode(ent);
-            return copiedNode;
-        } else {
-            List<BEntry> allEntries = this.getAllValidEntries();
-            allEntries.add(ent);
-            Collections.sort(allEntries);
-            overwriteBNodeEntries(allEntries);
+        if (hasSpace()) {
+            List<BEntry> validEntries = getAllValidEntries();
+            validEntries.add(ent);
+            Collections.sort(validEntries);
+            overwriteBNodeEntries(validEntries);
             return null;
+        } else {
+            return splitNode(ent);
         }
     }
 
@@ -70,18 +69,22 @@ public class LeafNode extends BPlusNode {
      */
     @Override
     public InnerEntry splitNode(BEntry newEntry) {
-        /* split leaf node into two nodes, of length d and d+1 */
-        LeafNode rightNode = new LeafNode(getTree());
-        List<BEntry> allEntries = this.getAllValidEntries();
-        allEntries.add(newEntry);
-        Collections.sort(allEntries);
-        int d = allEntries.size()/2;
-        this.overwriteBNodeEntries(allEntries.subList(0, d));
-        rightNode.overwriteBNodeEntries(allEntries.subList(d, allEntries.size()));
+        List<BEntry> validEntries = getAllValidEntries();
+        validEntries.add(newEntry);
+        Collections.sort(validEntries);
 
-        /* copy up inner entry to parent */
-        InnerEntry innerEnt = new InnerEntry(allEntries.get(d).getKey(), rightNode.getPageNum());
-        return innerEnt;
+        List<BEntry> leftNodeEntries = validEntries.subList(0, validEntries.size()/2);
+        BEntry middleEntry = validEntries.get(validEntries.size()/2);
+        List<BEntry> rightNodeEntries = validEntries.subList(validEntries.size()/2, validEntries.size());
+
+        overwriteBNodeEntries(leftNodeEntries);
+
+        LeafNode rightNode = new LeafNode(getTree());
+        rightNode.overwriteBNodeEntries(rightNodeEntries);
+
+        InnerEntry newMiddleEntry = new InnerEntry(middleEntry.getKey(), rightNode.getPageNum());
+
+        return newMiddleEntry;
     }
 
 

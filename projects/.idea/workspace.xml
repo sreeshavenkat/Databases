@@ -17,21 +17,97 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="BPlusTree.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/index/BPlusTree.java">
+      <file leaf-file-name="BNLJOperator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/BNLJOperator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+            <state relative-caret-position="0">
+              <caret line="124" column="39" lean-forward="false" selection-start-line="124" selection-start-column="28" selection-end-line="124" selection-end-column="39" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#10529#10530#0" expanded="false" />
+                <element signature="e#10584#10585#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PNLJOperator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/PNLJOperator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2640">
+              <caret line="185" column="11" lean-forward="false" selection-start-line="185" selection-start-column="11" selection-end-line="185" selection-end-column="11" />
+              <folding>
+                <element signature="imports" expanded="false" />
+                <element signature="e#8876#8877#0" expanded="false" />
+                <element signature="e#8931#8932#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SNLJOperator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/SNLJOperator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="178">
+              <caret line="88" column="43" lean-forward="false" selection-start-line="88" selection-start-column="43" selection-end-line="88" selection-end-column="43" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TestLargeBPlusTree.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/index/TestLargeBPlusTree.java">
+      <file leaf-file-name="IndexScanOperator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/IndexScanOperator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+            <state relative-caret-position="195">
+              <caret line="151" column="75" lean-forward="true" selection-start-line="151" selection-start-column="75" selection-end-line="151" selection-end-column="75" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SortMergeOperator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/SortMergeOperator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="316">
+              <caret line="262" column="26" lean-forward="false" selection-start-line="262" selection-start-column="26" selection-end-line="262" selection-end-column="26" />
+              <folding>
+                <element signature="e#4066#4074#0" expanded="true" />
+                <element signature="e#4128#4136#0" expanded="true" />
+                <element signature="e#7889#7898#0" expanded="true" />
+                <element signature="e#7982#7991#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestJoinOperator.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestJoinOperator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="392" column="0" lean-forward="false" selection-start-line="392" selection-start-column="0" selection-end-line="392" selection-end-column="0" />
+              <folding>
+                <element signature="e#4486#4495#0" expanded="true" />
+                <element signature="e#24180#24189#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestIndexScanOperator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestIndexScanOperator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="44" column="11" lean-forward="false" selection-start-line="44" selection-start-column="11" selection-end-line="44" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestSourceOperator.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestSourceOperator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="96">
+              <caret line="31" column="25" lean-forward="false" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -41,29 +117,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>schema</find>
-      <find>verify</find>
-      <find>setentr</find>
-      <find>setentryc</find>
-      <find>slot</find>
-      <find>numentriesperpage</find>
-      <find>found</find>
-      <find>catch</find>
-      <find>record</find>
-      <find>pagenum</find>
-      <find>++</find>
-      <find>category</find>
-      <find>databaseexception</find>
-      <find>createrec</find>
-      <find>createschema</find>
-      <find>studenttest</find>
-      <find>deleterecord</find>
-      <find>offset</find>
-      <find>remove</find>
-      <find>deleteRecord</find>
-      <find>updaterecord</find>
-      <find>addrecord</find>
-      <find>freepages</find>
+      <find>page</find>
+      <find>compare</find>
+      <find>leftpage</find>
+      <find>leftiterator</find>
+      <find>leftreco</find>
+      <find>lefttable</find>
+      <find>addreco</find>
+      <find>getrightsource</find>
+      <find>hasnex</find>
+      <find>nextrecord</find>
+      <find>nextlef</find>
+      <find>leftheader</find>
+      <find>nextleft</find>
+      <find>next</find>
+      <find>get</find>
+      <find>addrec</find>
+      <find>getnext</find>
+      <find>hashTable</find>
+      <find>simplesort</find>
+      <find>this.leftentry</find>
+      <find>getnextleft</find>
+      <find>nextRecord</find>
+      <find>righttable</find>
+      <find>this.leftiterator.next</find>
+      <find>left</find>
+      <find>system.out.println</find>
+      <find>SimplePNLJ</find>
+      <find>StudentTestP3</find>
+      <find>SortMergeOperator</find>
+      <find>entering</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -79,6 +162,15 @@
         <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/table/Schema.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/table/TestTable.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/index/BPlusTree.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/BNLJOperator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/GraceHashOperator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/SNLJOperator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/PNLJOperator.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestSourceOperator.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/SortMergeOperator.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/index/TestLargeBPlusTree.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/IndexScanOperator.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestJoinOperator.java" />
       </list>
     </option>
   </component>
@@ -111,10 +203,10 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="47" />
-    <option name="y" value="211" />
-    <option name="width" value="1287" />
-    <option name="height" value="877" />
+    <option name="x" value="208" />
+    <option name="y" value="23" />
+    <option name="width" value="1226" />
+    <option name="height" value="839" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -131,9 +223,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -183,6 +272,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="database" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="projects" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="projects" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="database" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="query" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -312,12 +427,29 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="index" />
+              <option name="myItemId" value="query" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="projects" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="projects" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -326,7 +458,137 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.TestJoinOperator.PNLJ5">
+    <configuration default="false" name="TestJoinOperator.PNLJ1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="edu.berkeley.cs186.database.query.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="database" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="java.edu.berkeley.cs186.database.query" />
+      <option name="MAIN_CLASS_NAME" value="edu.berkeley.cs186.database.query.TestJoinOperator" />
+      <option name="METHOD_NAME" value="PNLJ1" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestJoinOperator.PNLJ3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="edu.berkeley.cs186.database.query.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="database" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="java.edu.berkeley.cs186.database.query" />
+      <option name="MAIN_CLASS_NAME" value="edu.berkeley.cs186.database.query.TestJoinOperator" />
+      <option name="METHOD_NAME" value="PNLJ3" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestJoinOperator.BNLJ1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="edu.berkeley.cs186.database.query.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="database" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="java.edu.berkeley.cs186.database.query" />
+      <option name="MAIN_CLASS_NAME" value="edu.berkeley.cs186.database.query.TestJoinOperator" />
+      <option name="METHOD_NAME" value="BNLJ1" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestJoinOperator.BNLJ2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="edu.berkeley.cs186.database.query.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="database" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="java.edu.berkeley.cs186.database.query" />
+      <option name="MAIN_CLASS_NAME" value="edu.berkeley.cs186.database.query.TestJoinOperator" />
+      <option name="METHOD_NAME" value="BNLJ2" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="TestJoinOperator.PNLJ5" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="edu.berkeley.cs186.database.query.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="database" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="java.edu.berkeley.cs186.database.query" />
+      <option name="MAIN_CLASS_NAME" value="edu.berkeley.cs186.database.query.TestJoinOperator" />
+      <option name="METHOD_NAME" value="PNLJ5" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
     <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
       <module name="" />
       <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
@@ -553,6 +815,22 @@
       <listeners />
       <method />
     </configuration>
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.PNLJ1" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.PNLJ3" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.BNLJ1" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.BNLJ2" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.PNLJ5" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.PNLJ5" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.BNLJ2" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.BNLJ1" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.PNLJ3" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.TestJoinOperator.PNLJ1" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="ShelveChangesManager" show_recycled="false">
     <option name="remove_strategy" value="false" />
@@ -567,31 +845,64 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="TestJoinOperator_BNLJ1 - 2017.04.07 at 21h 24m 31s.xml">
+      <configuration name="TestJoinOperator.BNLJ1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_BNLJ2 - 2017.04.07 at 21h 25m 09s.xml">
+      <configuration name="TestJoinOperator.BNLJ2" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ1 - 2017.04.07 at 21h 15m 35s.xml">
+      <configuration name="TestJoinOperator.PNLJ1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ1 - 2017.04.07 at 21h 21m 09s.xml">
+      <configuration name="TestJoinOperator.PNLJ1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ1 - 2017.04.07 at 21h 21m 17s.xml">
+      <configuration name="TestJoinOperator.PNLJ1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ1 - 2017.04.07 at 21h 21m 22s.xml">
+      <configuration name="TestJoinOperator.PNLJ1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ1 - 2017.04.07 at 21h 22m 21s.xml">
+      <configuration name="TestJoinOperator.PNLJ1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ1 - 2017.04.07 at 21h 23m 08s.xml">
+      <configuration name="TestJoinOperator.PNLJ1" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ3 - 2017.04.07 at 21h 23m 30s.xml">
+      <configuration name="TestJoinOperator.PNLJ3" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="TestJoinOperator_PNLJ5 - 2017.04.07 at 21h 28m 52s.xml">
+      <configuration name="TestJoinOperator.PNLJ5" configurationId="JUnit" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="47" y="211" width="1287" height="877" extended-state="0" />
-    <editor active="false" />
+    <frame x="208" y="23" width="1226" height="839" extended-state="1" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32597402" sideWeight="0.4972299" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2289604" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31311882" sideWeight="0.50277007" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31311882" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2896104" sideWeight="0.4972299" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26651126" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27895597" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26625" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -612,51 +923,21 @@
           <properties />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="2" />
+      <option name="time" value="51" />
     </breakpoint-manager>
     <watches-manager />
   </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/index/BPlusTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/index/TestLargeBPlusTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/index/BPlusTree.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/table/Schema.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/table/Schema.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2340">
           <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -665,11 +946,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14193#14202#0" expanded="false" />
-            <element signature="e#14416#14424#0" expanded="false" />
-            <element signature="e#14711#14720#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -713,7 +990,7 @@
         <state relative-caret-position="2340">
           <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -722,11 +999,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14193#14202#0" expanded="false" />
-            <element signature="e#14416#14424#0" expanded="false" />
-            <element signature="e#14711#14720#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -770,7 +1043,7 @@
         <state relative-caret-position="2340">
           <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -779,11 +1052,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#14193#14202#0" expanded="false" />
-            <element signature="e#14416#14424#0" expanded="false" />
-            <element signature="e#14711#14720#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -827,7 +1096,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -837,7 +1106,7 @@
         <state relative-caret-position="345">
           <caret line="23" column="47" lean-forward="true" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -899,13 +1168,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/databox/DataBox.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1245">
-          <caret line="83" column="5" lean-forward="true" selection-start-line="83" selection-start-column="5" selection-end-line="83" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/table/Record.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -933,19 +1195,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-315">
           <caret line="17" column="13" lean-forward="false" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/table/Table.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="455" column="6" lean-forward="false" selection-start-line="455" selection-start-column="6" selection-end-line="455" selection-end-column="6" />
-          <folding>
-            <element signature="e#14193#14202#0" expanded="false" />
-            <element signature="e#14416#14424#0" expanded="false" />
-            <element signature="e#14711#14720#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -954,7 +1203,7 @@
         <state relative-caret-position="511">
           <caret line="156" column="0" lean-forward="false" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -994,19 +1243,195 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/students.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="45" lean-forward="false" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/GroupByOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="11" column="13" lean-forward="false" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/databox/DataBox.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="95" column="4" lean-forward="false" selection-start-line="95" selection-start-column="4" selection-end-line="95" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/QueryOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="99" column="35" lean-forward="false" selection-start-line="99" selection-start-column="35" selection-end-line="99" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/GraceHashOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="511">
+          <caret line="95" column="24" lean-forward="false" selection-start-line="95" selection-start-column="15" selection-end-line="95" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/Assert.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="138" column="0" lean-forward="true" selection-start-line="138" selection-start-column="0" selection-end-line="138" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/index/BPlusTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
+        <state relative-caret-position="-3285">
           <caret line="27" column="13" lean-forward="false" selection-start-line="27" selection-start-column="13" selection-end-line="27" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/PNLJOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2640">
+          <caret line="185" column="11" lean-forward="false" selection-start-line="185" selection-start-column="11" selection-end-line="185" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#8876#8877#0" expanded="false" />
+            <element signature="e#8931#8932#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/table/Table.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-988">
+          <caret line="509" column="20" lean-forward="true" selection-start-line="509" selection-start-column="0" selection-end-line="510" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/statements/FailOnTimeout.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="317">
+          <caret line="62" column="0" lean-forward="false" selection-start-line="62" selection-start-column="0" selection-end-line="62" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/io/PageAllocator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5010">
+          <caret line="369" column="0" lean-forward="false" selection-start-line="369" selection-start-column="0" selection-end-line="369" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/internal/runners/model/ReflectiveCallable.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="17" column="0" lean-forward="false" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/JoinOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="137" column="0" lean-forward="false" selection-start-line="137" selection-start-column="0" selection-end-line="137" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestGroupByOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-780">
+          <caret line="28" column="13" lean-forward="false" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/BNLJOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="124" column="39" lean-forward="false" selection-start-line="124" selection-start-column="28" selection-end-line="124" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#10529#10530#0" expanded="false" />
+            <element signature="e#10584#10585#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestSourceOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="31" column="25" lean-forward="false" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestIndexScanOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="44" column="11" lean-forward="false" selection-start-line="44" selection-start-column="11" selection-end-line="44" selection-end-column="11" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/index/TestLargeBPlusTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="21" column="13" lean-forward="false" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
+        <state relative-caret-position="315">
+          <caret line="40" column="0" lean-forward="true" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding>
+            <element signature="e#1383#1384#0" expanded="true" />
+            <element signature="e#1466#1467#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/SNLJOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="178">
+          <caret line="88" column="43" lean-forward="false" selection-start-line="88" selection-start-column="43" selection-end-line="88" selection-end-column="43" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/SortMergeOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="316">
+          <caret line="262" column="26" lean-forward="false" selection-start-line="262" selection-start-column="26" selection-end-line="262" selection-end-column="26" />
+          <folding>
+            <element signature="e#4066#4074#0" expanded="true" />
+            <element signature="e#4128#4136#0" expanded="true" />
+            <element signature="e#7889#7898#0" expanded="true" />
+            <element signature="e#7982#7991#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/berkeley/cs186/database/query/IndexScanOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="151" column="75" lean-forward="true" selection-start-line="151" selection-start-column="75" selection-end-line="151" selection-end-column="75" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/berkeley/cs186/database/query/TestJoinOperator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="392" column="0" lean-forward="false" selection-start-line="392" selection-start-column="0" selection-end-line="392" selection-end-column="0" />
+          <folding>
+            <element signature="e#4486#4495#0" expanded="true" />
+            <element signature="e#24180#24189#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
