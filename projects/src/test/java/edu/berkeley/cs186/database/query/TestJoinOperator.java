@@ -206,7 +206,8 @@ public class TestJoinOperator {
         assertEquals(100*100, numRecords);
     }
 
-    @Test(timeout=5000)
+    //@Test(timeout=5000)
+    @Test
     public void testSimpleSortMergeJoin() throws QueryPlanException, DatabaseException, IOException {
         TestSourceOperator sourceOperator = new TestSourceOperator();
         File tempDir = tempFolder.newFolder("joinTest");
@@ -229,6 +230,7 @@ public class TestJoinOperator {
 
 
         while (outputIterator.hasNext()) {
+            assertEquals(expectedRecord, outputIterator.next());
             numRecords++;
         }
 
