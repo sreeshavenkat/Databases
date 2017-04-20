@@ -212,7 +212,6 @@ public class TestQueryPlan {
       assertTrue(values.get(1) instanceof BoolDataBox);
       count++;
     }
-
     assertTrue(count > 10);
 
     transaction.end();
