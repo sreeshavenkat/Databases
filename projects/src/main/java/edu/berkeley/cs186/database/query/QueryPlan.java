@@ -1,8 +1,6 @@
 package edu.berkeley.cs186.database.query;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 import edu.berkeley.cs186.database.Database;
 import edu.berkeley.cs186.database.DatabaseException;
@@ -31,10 +29,10 @@ public class QueryPlan {
   private List<String> joinTableNames;
   private List<String> joinLeftColumnNames;
   private List<String> joinRightColumnNames;
-  private List<String> whereColumnNames;
-  private List<PredicateOperator> whereOperators;
-  private List<DataBox> whereDataBoxes;
-  private List<String> selectColumns;
+  private List<String> selectColumnNames;
+  private List<PredicateOperator> selectOperators;
+  private List<DataBox> selectDataBoxes;
+  private List<String> projectColumns;
   private String groupByColumn;
   private boolean hasCount;
   private String averageColumnName;
@@ -50,14 +48,14 @@ public class QueryPlan {
     this.transaction = transaction;
     this.startTableName = startTableName;
 
-    this.selectColumns = new ArrayList<String>();
+    this.projectColumns = new ArrayList<String>();
     this.joinTableNames = new ArrayList<String>();
     this.joinLeftColumnNames = new ArrayList<String>();
     this.joinRightColumnNames = new ArrayList<String>();
 
-    this.whereColumnNames = new ArrayList<String>();
-    this.whereOperators = new ArrayList<PredicateOperator>();
-    this.whereDataBoxes = new ArrayList<DataBox>();
+    this.selectColumnNames = new ArrayList<String>();
+    this.selectOperators = new ArrayList<PredicateOperator>();
+    this.selectDataBoxes = new ArrayList<DataBox>();
 
     this.hasCount = false;
     this.averageColumnName = null;
@@ -68,27 +66,31 @@ public class QueryPlan {
     this.finalOperator = null;
   }
 
-  /**
-   * Add a select operator to the QueryPlan with a list of column names. Can only specify one set
-   * of selections.
-   *
-   * @param columnNames the columns to select
-   * @throws QueryPlanException
-   */
-  public void select(List<String> columnNames) throws QueryPlanException {
-    if (!this.selectColumns.isEmpty()) {
-      throw new QueryPlanException("Cannot add more than one select operator to this query.");
-    }
-
-    if (columnNames.isEmpty()) {
-      throw new QueryPlanException("Cannot select no columns.");
-    }
-
-    this.selectColumns = columnNames;
+  public QueryOperator getFinalOperator() {
+    return this.finalOperator;
   }
 
   /**
-   * Add a where operator. Only returns columns in which the column fulfills the predicate relative
+   * Add a project operator to the QueryPlan with a list of column names. Can only specify one set
+   * of projections.
+   *
+   * @param columnNames the columns to project
+   * @throws QueryPlanException
+   */
+  public void project(List<String> columnNames) throws QueryPlanException {
+    if (!this.projectColumns.isEmpty()) {
+      throw new QueryPlanException("Cannot add more than one project operator to this query.");
+    }
+
+    if (columnNames.isEmpty()) {
+      throw new QueryPlanException("Cannot project no columns.");
+    }
+
+    this.projectColumns = columnNames;
+  }
+
+  /**
+   * Add a select operator. Only returns columns in which the column fulfills the predicate relative
    * to value.
    *
    * @param column the column to specify the predicate on
@@ -96,10 +98,10 @@ public class QueryPlan {
    * @param value the value to compare against
    * @throws QueryPlanException
    */
-  public void where(String column, PredicateOperator comparison, DataBox value) throws QueryPlanException {
-    this.whereColumnNames.add(column);
-    this.whereOperators.add(comparison);
-    this.whereDataBoxes.add(value);
+  public void select(String column, PredicateOperator comparison, DataBox value) throws QueryPlanException {
+    this.selectColumnNames.add(column);
+    this.selectOperators.add(comparison);
+    this.selectDataBoxes.add(value);
   }
 
   /**
@@ -156,24 +158,312 @@ public class QueryPlan {
   }
 
   /**
-   * Generates a naïve QueryPlan in which all joins are at the bottom of the DAG followed by all where
-   * predicates, an optional group by operator, and a set of selects (in that order).
+   * Generates a naïve QueryPlan in which all joins are at the bottom of the DAG followed by all select
+   * predicates, an optional group by operator, and a set of projects (in that order).
    *
    * @return an iterator of records that is the result of this query
    * @throws DatabaseException
    * @throws QueryPlanException
    */
   public Iterator<Record> execute() throws DatabaseException, QueryPlanException {
+    String indexColumn = this.checkIndexEligible();
 
-    // start off with the start table scan as the source
-    this.finalOperator = new SequentialScanOperator(this.transaction, this.startTableName);
+    if (indexColumn != null) {
+      this.generateIndexPlan(indexColumn);
+    } else {
+      // start off with the start table scan as the source
+      this.finalOperator = new SequentialScanOperator(this.transaction, this.startTableName);
 
-    this.addJoins();
-    this.addWheres();
-    this.addGroupBy();
-    this.addSelects();
+      this.addJoins();
+      this.addSelects();
+      this.addGroupBy();
+      this.addProjects();
+    }
 
     return this.finalOperator.execute();
+  }
+
+  /**
+   * Generates an optimal QueryPlan based on the System R cost-based query optimizer.
+   *
+   * @return an iterator of records that is the result of this query
+   * @throws DatabaseException
+   * @throws QueryPlanException
+   */
+  public Iterator<Record> executeOptimal() throws DatabaseException, QueryPlanException {
+    List<String> tableNames = new ArrayList<String>();
+    tableNames.add(this.startTableName);
+    tableNames.addAll(this.joinTableNames);
+    int pass = 1;
+
+    // Pass 1: Iterate through all single tables. For each single table, find
+    // the lowest cost QueryOperator to access that table. Construct a mapping
+    // of each table name to its lowest cost operator.
+    Map<Set, QueryOperator> map = new HashMap<Set, QueryOperator>();
+    for (String table : tableNames) {
+      QueryOperator minOp = this.minCostSingleAccess(table);
+      Set<String> key = new HashSet<String>();
+      key.add(table);
+      map.put(key, minOp);
+    }
+
+    // Pass i: On each pass, use the results from the previous pass to find the
+    // lowest cost joins with each single table. Repeat until all tables have
+    // been joined.
+    Map<Set, QueryOperator> pass1Map = map;
+    Map<Set, QueryOperator> prevMap;
+    while (pass++ < tableNames.size()) {
+      prevMap = map;
+      map = this.minCostJoins(prevMap, pass1Map);
+    }
+
+    // Get the lowest cost operator from the last pass, add GROUP BY and SELECT
+    // operators, and return an iterator on the final operator
+    this.finalOperator = this.minCostOperator(map);
+    this.addGroupBy();
+    this.addProjects();
+    return this.finalOperator.iterator();
+  }
+
+  /**
+   * Gets all SELECT predicates for which there exists an index on the column
+   * referenced in that predicate for the given table.
+   *
+   * @return an ArrayList of SELECT predicates
+   */
+  private List<Integer> getEligibleIndexColumns(String table) {
+    List<Integer> selectIndices = new ArrayList<Integer>();
+
+    for (int i = 0; i < this.selectColumnNames.size(); i++) {
+      String column = this.selectColumnNames.get(i);
+      if (this.transaction.indexExists(table, column) &&
+          this.selectOperators.get(i) != PredicateOperator.NOT_EQUALS) {
+        selectIndices.add(i);
+      }
+    }
+
+    return selectIndices;
+  }
+
+  /**
+   * Applies all eligible SELECT predicates to a given source, except for the
+   * predicate at index except. The purpose of except is because there might
+   * be one SELECT predicate that was already used for an index scan, so no
+   * point applying it again. A SELECT predicate is represented as elements of
+   * this.selectColumnNames, this.selectOperators, and this.selectDataBoxes that
+   * correspond to the same index of these lists.
+   *
+   * @return a new QueryOperator after SELECT has been applied
+   * @throws DatabaseException
+   * @throws QueryPlanException
+   */
+  private QueryOperator pushDownSelects(QueryOperator source, int except) throws QueryPlanException, DatabaseException {
+    for (int i = 0; i < this.selectColumnNames.size(); i++) {
+      if (i == except) {
+        continue;
+      }
+      String selectColumn = this.selectColumnNames.get(i);
+      PredicateOperator operator = this.selectOperators.get(i);
+      DataBox value = this.selectDataBoxes.get(i);
+      try {
+        source = new SelectOperator(source, selectColumn, operator, value);
+      } catch (QueryPlanException e) {
+        continue;
+      }
+    }
+    return source;
+  }
+
+  /**
+   * Finds the lowest cost QueryOperator that scans the given table. First
+   * determine the cost of a sequential scan. Then for every index that can be
+   * used on that table, determine the cost of an index scan. Keep track of
+   * the minimum cost operation. Then push down eligible projects (SELECT
+   * predicates). If an index scan was chosen, exclude that SELECT predicate from
+   * the push down. This method is called during the first pass of the search
+   * algorithm to determine the most efficient way to access each single table.
+   *
+   * @return a QueryOperator that scans the given table
+   * @throws DatabaseException
+   * @throws QueryPlanException
+   */
+  private QueryOperator minCostSingleAccess(String table) throws DatabaseException, QueryPlanException {
+    QueryOperator minOp = null;
+
+    // Find the cost of a sequential scan of the table
+    minOp = new SequentialScanOperator(this.transaction, table);
+    int minOpCost = minOp.getIOCost();
+
+    // For each eligible index column, find the cost of an index scan of the
+    // table and retain the lowest cost operator
+    // TODO: Implement me!
+    List<Integer> selectIndices = this.getEligibleIndexColumns(table);
+    int minSelectIdx = -1;
+    for (int s : selectIndices) {
+      String indexColumn = this.selectColumnNames.get(s);
+      PredicateOperator operator = this.selectOperators.get(s);
+      DataBox db = this.selectDataBoxes.get(s);
+      QueryOperator newOp = new IndexScanOperator(this.transaction, table, indexColumn, operator, db);
+      int newCost = newOp.getIOCost();
+      if (newCost < minOpCost) {
+        minOp = newOp;
+        minOpCost = newCost;
+        minSelectIdx = s;
+      }
+    }
+
+    // Push down SELECT predicates that apply to this table and that were not
+    // used for an index scan
+    minOp = this.pushDownSelects(minOp, minSelectIdx);
+    return minOp;
+  }
+
+  /**
+   * Given a join condition between an outer relation represented by leftOp
+   * and an inner relation represented by rightOp, find the lowest cost join
+   * operator out of all the possible join types in JoinOperator.JoinType.
+   *
+   * @return lowest cost join QueryOperator between the input operators
+   * @throws QueryPlanException
+   */
+  private QueryOperator minCostJoinType(QueryOperator leftOp,
+                                        QueryOperator rightOp,
+                                        String leftColumn,
+                                        String rightColumn) throws QueryPlanException,
+                                                                   DatabaseException {
+    QueryOperator newOp = null;
+    QueryOperator minOp = null;
+    int minCost = Integer.MAX_VALUE;
+    for (JoinOperator.JoinType type : JoinOperator.JoinType.values()) {
+      switch (type) {
+        case BNLJ:
+          newOp = new BNLJOperator(leftOp, rightOp, leftColumn, rightColumn, this.transaction);
+          break;
+        case PNLJ:
+          newOp = new PNLJOperator(leftOp, rightOp, leftColumn, rightColumn, this.transaction);
+          break;
+        case GRACEHASH:
+          newOp = new GraceHashOperator(leftOp, rightOp, leftColumn, rightColumn, this.transaction);
+          break;
+        default:
+          newOp = new SNLJOperator(leftOp, rightOp, leftColumn, rightColumn, this.transaction);
+          break;
+      }
+      if (newOp.getIOCost() < minCost) {
+        minOp = newOp;
+        minCost = newOp.getIOCost();
+      }
+    }
+    return minOp;
+  }
+
+  /**
+   * Iterate through all table sets in the previous pass of the search. For each
+   * table set, check each join predicate to see if there is a valid join
+   * condition with a new table. If so, check the cost of each type of join and
+   * keep the minimum cost join. Construct and return a mapping of each set of
+   * table names being joined to its lowest cost join operator. A join predicate
+   * is represented as elements of this.joinTableNames, this.joinLeftColumnNames,
+   * and this.joinRightColumnNames that correspond to the same index of these lists.
+   *
+   * @return a mapping of table names to a join QueryOperator
+   * @throws QueryPlanException
+   */
+  private Map<Set, QueryOperator> minCostJoins(Map<Set, QueryOperator> prevMap,
+                                               Map<Set, QueryOperator> pass1Map) throws QueryPlanException,
+                                                                                        DatabaseException {
+    Map<Set, QueryOperator> map = new HashMap<Set, QueryOperator>();
+    for (Set p : prevMap.keySet()) {
+      for (int i = 0; i < this.joinTableNames.size(); i++) {
+        String rightColumn = this.joinRightColumnNames.get(i);
+        String leftColumn = this.joinLeftColumnNames.get(i);
+        String rightTable = this.joinTableNames.get(i);
+        String leftTable = leftColumn.split("\\.")[0];
+        boolean hasRight = p.contains(rightTable);
+        boolean hasLeft = p.contains(leftTable);
+        QueryOperator leftOp, rightOp, minOp;
+        Set<String> allTables = new HashSet<String>();
+        leftOp = prevMap.get(p);
+        if (hasLeft && !hasRight) {
+          allTables.add(rightTable);
+          rightOp = pass1Map.get(allTables);
+          minOp = this.minCostJoinType(leftOp, rightOp, leftColumn, rightColumn);
+        } else if (!hasLeft && hasRight) {
+          allTables.add(leftTable);
+          rightOp = pass1Map.get(allTables);
+          minOp = this.minCostJoinType(leftOp, rightOp, rightColumn, leftColumn);
+        } else {
+          continue;
+        }
+        allTables.addAll(p);
+        if (map.get(allTables) == null || minOp.getIOCost() < map.get(allTables).getIOCost()) {
+          map.put(allTables, minOp);
+        }
+      }
+    }
+    return map;
+  }
+
+  /**
+   * Finds the lowest cost QueryOperator in the given mapping. A mapping is
+   * generated on each pass of the search algorithm, and relates a set of tables
+   * to the lowest cost QueryOperator accessing those tables. This method is
+   * called at the end of the search algorithm after all passes have been
+   * processed.
+   *
+   * @return a QueryOperator in the given mapping
+   * @throws QueryPlanException
+   */
+  private QueryOperator minCostOperator(Map<Set, QueryOperator> map) throws QueryPlanException, DatabaseException {
+    QueryOperator minOp = null;
+    QueryOperator newOp;
+    int minCost = Integer.MAX_VALUE;
+    int newCost;
+    for (Set tables : map.keySet()) {
+      newOp = map.get(tables);
+      newCost = newOp.getIOCost();
+      if (newCost < minCost) {
+        minOp = newOp;
+        minCost = newCost;
+      }
+    }
+    return minOp;
+  }
+
+  private String checkIndexEligible() {
+    if (this.selectColumnNames.size() > 0
+        && this.groupByColumn == null
+        && this.joinTableNames.size() == 0) {
+
+      int index = 0;
+      for (String column : selectColumnNames) {
+        if (this.transaction.indexExists(this.startTableName, column)) {
+          if (this.selectOperators.get(index) != PredicateOperator.NOT_EQUALS) {
+            return column;
+          }
+        }
+
+        index++;
+      }
+    }
+
+    return null;
+  }
+
+  private void generateIndexPlan(String indexColumn) throws QueryPlanException, DatabaseException {
+    int selectIndex = this.selectColumnNames.indexOf(indexColumn);
+    PredicateOperator operator = this.selectOperators.get(selectIndex);
+    DataBox value = this.selectDataBoxes.get(selectIndex);
+
+    this.finalOperator = new IndexScanOperator(this.transaction, this.startTableName, indexColumn, operator,
+        value);
+
+    this.selectColumnNames.remove(selectIndex);
+    this.selectOperators.remove(selectIndex);
+    this.selectDataBoxes.remove(selectIndex);
+
+    this.addSelects();
+    this.addProjects();
   }
 
   private void addJoins() throws QueryPlanException, DatabaseException {
@@ -182,34 +472,34 @@ public class QueryPlan {
     for (String joinTable : this.joinTableNames) {
       SequentialScanOperator scanOperator = new SequentialScanOperator(this.transaction, joinTable);
 
-      JoinOperator joinOperator = new JoinOperator(finalOperator, scanOperator,
-          this.joinLeftColumnNames.get(index), this.joinRightColumnNames.get(index));
+      SNLJOperator joinOperator = new SNLJOperator(finalOperator, scanOperator,
+          this.joinLeftColumnNames.get(index), this.joinRightColumnNames.get(index), this.transaction); //changed from new JoinOperator
 
       this.finalOperator = joinOperator;
       index++;
     }
   }
 
-  private void addWheres() throws QueryPlanException, DatabaseException {
+  private void addSelects() throws QueryPlanException, DatabaseException {
     int index = 0;
 
-    for (String whereColumn : this.whereColumnNames) {
-      PredicateOperator operator = this.whereOperators.get(index);
-      DataBox value = this.whereDataBoxes.get(index);
+    for (String selectColumn : this.selectColumnNames) {
+      PredicateOperator operator = this.selectOperators.get(index);
+      DataBox value = this.selectDataBoxes.get(index);
 
-      WhereOperator whereOperator = new WhereOperator(this.finalOperator, whereColumn,
+      SelectOperator selectOperator = new SelectOperator(this.finalOperator, selectColumn,
           operator, value);
 
-      this.finalOperator = whereOperator;
+      this.finalOperator = selectOperator;
       index++;
     }
   }
 
   private void addGroupBy() throws QueryPlanException, DatabaseException {
     if (this.groupByColumn != null) {
-      if (this.selectColumns.size() > 2 || (this.selectColumns.size() == 1 &&
-          !this.selectColumns.get(0).equals(this.groupByColumn))) {
-        throw new QueryPlanException("Can only select columns specified in the GROUP BY clause.");
+      if (this.projectColumns.size() > 2 || (this.projectColumns.size() == 1 &&
+          !this.projectColumns.get(0).equals(this.groupByColumn))) {
+        throw new QueryPlanException("Can only project columns specified in the GROUP BY clause.");
       }
 
       GroupByOperator groupByOperator = new GroupByOperator(this.finalOperator, this.transaction,
@@ -219,13 +509,13 @@ public class QueryPlan {
     }
   }
 
-  private void addSelects() throws QueryPlanException, DatabaseException {
-    if (!this.selectColumns.isEmpty() || this.hasCount || this.sumColumnName != null
+  private void addProjects() throws QueryPlanException, DatabaseException {
+    if (!this.projectColumns.isEmpty() || this.hasCount || this.sumColumnName != null
         || this.averageColumnName != null) {
-      SelectOperator selectOperator = new SelectOperator(this.finalOperator, this.selectColumns,
+      ProjectOperator projectOperator = new ProjectOperator(this.finalOperator, this.projectColumns,
           this.hasCount, this.averageColumnName, this.sumColumnName);
 
-      this.finalOperator = selectOperator;
+      this.finalOperator = projectOperator;
     }
   }
 }

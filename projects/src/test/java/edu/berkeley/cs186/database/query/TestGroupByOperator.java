@@ -23,7 +23,7 @@ import edu.berkeley.cs186.database.table.Record;
 
 import static org.junit.Assert.*;
 
-public class GroupByOperatorTest {
+public class TestGroupByOperator {
 
   @Rule
   public TemporaryFolder tempFolder = new TemporaryFolder();

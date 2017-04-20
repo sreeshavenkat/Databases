@@ -1,10 +1,13 @@
 package edu.berkeley.cs186.database.query;
 
-import edu.berkeley.cs186.database.databox.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import edu.berkeley.cs186.database.StudentTestP4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
+import org.junit.experimental.categories.Category;
+import org.junit.rules.Timeout;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,22 +19,30 @@ import java.util.Random;
 import edu.berkeley.cs186.database.Database;
 import edu.berkeley.cs186.database.DatabaseException;
 import edu.berkeley.cs186.database.TestUtils;
+import edu.berkeley.cs186.database.databox.BoolDataBox;
 import edu.berkeley.cs186.database.databox.DataBox;
+import edu.berkeley.cs186.database.databox.FloatDataBox;
+import edu.berkeley.cs186.database.databox.IntDataBox;
+import edu.berkeley.cs186.database.databox.StringDataBox;
 import edu.berkeley.cs186.database.table.MarkerRecord;
 import edu.berkeley.cs186.database.table.Record;
 import edu.berkeley.cs186.database.table.Schema;
+import edu.berkeley.cs186.database.table.stats.StringHistogram;
 
 import static org.junit.Assert.*;
 
-public class QueryPlanTest {
+public class TestQueryPlan {
   private Database database;
   private Random random = new Random();
-  private String alphabet = " abcdefghijklmnopqrstuvwxyz0123456789";
+  private String alphabet = StringHistogram.alphaNumeric;
   private String defaulTableName = "testAllTypes";
   private int defaultNumRecords = 100;
 
   @Rule
   public TemporaryFolder tempFolder = new TemporaryFolder();
+
+  @Rule
+  public Timeout globalTimeout = Timeout.seconds(10); // 10 seconds max per method tested
 
   @Before
   public void setUp() throws DatabaseException, IOException {
@@ -41,10 +52,10 @@ public class QueryPlanTest {
     this.database.createTable(TestUtils.createSchemaWithAllTypes(), this.defaulTableName);
     Database.Transaction transaction = this.database.beginTransaction();
 
-    // By default, create 100 records
+    // by default, create 100 records
     for (int i = 0; i < defaultNumRecords; i++) {
-      // Generate a random record
-      IntDataBox intValue = new IntDataBox(this.random.nextInt());
+      // generate a random record
+      IntDataBox intValue = new IntDataBox(i);
       FloatDataBox floatValue = new FloatDataBox(this.random.nextFloat());
       BoolDataBox boolValue = new BoolDataBox(this.random.nextBoolean());
       String stringValue = "";
@@ -67,7 +78,7 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSimpleSelect() throws DatabaseException, QueryPlanException {
+  public void testSimpleProject() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
@@ -75,7 +86,7 @@ public class QueryPlanTest {
     columnNames.add("int");
     columnNames.add("string");
 
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
     Iterator<Record> outputIterator = queryPlan.execute();
 
     int count = 0;
@@ -93,11 +104,11 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSimpleWhere() throws DatabaseException, QueryPlanException {
+  public void testSimpleSelect() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
-    queryPlan.where("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new IntDataBox(0));
+    queryPlan.select("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new IntDataBox(0));
 
     Iterator<Record> outputIterator = queryPlan.execute();
 
@@ -111,7 +122,104 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSimpleGroupBy() throws DatabaseException, QueryPlanException {
+  @Category(StudentTestP4.class)
+  public void test1_qp() throws DatabaseException, QueryPlanException {
+    Database.Transaction transaction = this.database.beginTransaction();
+    QueryPlan queryPlan = transaction.query(this.defaulTableName);
+
+    queryPlan.select("bool", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new BoolDataBox());
+
+    Iterator<Record> outputIterator = queryPlan.execute();
+
+    while (outputIterator.hasNext()) {
+      Record record = outputIterator.next();
+      assertTrue(record.getValues().get(0) instanceof BoolDataBox);
+    }
+
+    transaction.end();
+  }
+
+  @Test
+  @Category(StudentTestP4.class)
+  public void test2_qp() throws DatabaseException, QueryPlanException {
+    Database.Transaction transaction = this.database.beginTransaction();
+    QueryPlan queryPlan = transaction.query(this.defaulTableName);
+
+    queryPlan.select("bool", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new BoolDataBox());
+    queryPlan.select("bool", QueryPlan.PredicateOperator.LESS_THAN_EQUALS, new BoolDataBox());
+    Iterator<Record> outputIterator = queryPlan.execute();
+
+    while (outputIterator.hasNext()) {
+      Record record = outputIterator.next();
+      assertTrue(record.getValues().get(0) instanceof BoolDataBox);
+    }
+
+    transaction.end();
+  }
+
+  @Test
+  @Category(StudentTestP4.class)
+  public void test3_qp() throws DatabaseException, QueryPlanException {
+    Database.Transaction transaction = this.database.beginTransaction();
+    QueryPlan queryPlan = transaction.query(this.defaulTableName);
+
+    queryPlan.select("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new IntDataBox(0));
+
+    List<String> columnNames = new ArrayList<String>();
+    columnNames.add("string");
+    columnNames.add("float");
+    columnNames.add("bool");
+    columnNames.add("int");
+    queryPlan.project(columnNames);
+
+    Iterator<Record> recordIterator = queryPlan.execute();
+
+    while (recordIterator.hasNext()) {
+      Record record = recordIterator.next();
+      List<DataBox> values = record.getValues();
+
+      assertEquals(4, values.size());
+      assertTrue(values.get(0) instanceof StringDataBox);
+      assertTrue(values.get(1) instanceof FloatDataBox);
+      assertTrue(values.get(2) instanceof BoolDataBox);
+      assertTrue(values.get(3) instanceof IntDataBox);
+      assertTrue(values.get(3).getInt() >= 0);
+    }
+
+    transaction.end();
+  }
+
+  @Test
+  @Category(StudentTestP4.class)
+  public void test4_qp() throws DatabaseException, QueryPlanException {
+    Database.Transaction transaction = this.database.beginTransaction();
+    transaction.queryAs(this.defaulTableName, "t1");
+    transaction.queryAs(this.defaulTableName, "t2");
+    QueryPlan queryPlan = transaction.query("t1");
+    queryPlan.join("t2", "t1.string", "t2.string");
+    List<String> columnNames = new ArrayList<String>();
+    columnNames.add("t1.int");
+    columnNames.add("t2.bool");
+    queryPlan.project(columnNames);
+    Iterator<Record> recordIterator = queryPlan.execute();
+
+    int count = 0;
+    while (recordIterator.hasNext()) {
+      Record record = recordIterator.next();
+      List<DataBox> values = record.getValues();
+      assertEquals(2, values.size());
+      assertTrue(values.get(0) instanceof IntDataBox);
+      assertTrue(values.get(1) instanceof BoolDataBox);
+      count++;
+    }
+
+    assertTrue(count > 10);
+
+    transaction.end();
+  }
+
+  @Test
+  public void testSimpleGroupBy() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
     MarkerRecord markerRecord = MarkerRecord.getMarker();
@@ -138,7 +246,7 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSimpleJoin() throws DatabaseException, QueryPlanException {
+  public void testSimpleJoin() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
@@ -164,16 +272,16 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSelectWhere() throws DatabaseException, QueryPlanException {
+  public void testProjectSelect() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
-    queryPlan.where("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new IntDataBox(0));
+    queryPlan.select("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new IntDataBox(0));
 
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("bool");
     columnNames.add("int");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -192,7 +300,7 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSelectJoin() throws DatabaseException, QueryPlanException {
+  public void testProjectJoin() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     transaction.queryAs(this.defaulTableName, "t1");
     transaction.queryAs(this.defaulTableName, "t2");
@@ -203,7 +311,7 @@ public class QueryPlanTest {
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("t1.int");
     columnNames.add("t2.string");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -226,14 +334,14 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanWhereJoin() throws DatabaseException, QueryPlanException {
+  public void testSelectJoin() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     transaction.queryAs(this.defaulTableName, "t1");
 
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
     queryPlan.join("t1", "string", "string");
-    queryPlan.where("t1.bool", QueryPlan.PredicateOperator.NOT_EQUALS, new BoolDataBox(false));
+    queryPlan.select("t1.bool", QueryPlan.PredicateOperator.NOT_EQUALS, new BoolDataBox(false));
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -253,19 +361,19 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSelectWhereJoin() throws DatabaseException, QueryPlanException {
+  public void testProjectSelectJoin() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     transaction.queryAs(this.defaulTableName, "t1");
 
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
     queryPlan.join("t1", "string", "string");
-    queryPlan.where("t1.bool", QueryPlan.PredicateOperator.NOT_EQUALS, new BoolDataBox(false));
+    queryPlan.select("t1.bool", QueryPlan.PredicateOperator.NOT_EQUALS, new BoolDataBox(false));
 
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("t1.bool");
     columnNames.add(this.defaulTableName + ".int");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -285,14 +393,14 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSelectGroupBy() throws DatabaseException, QueryPlanException {
+  public void testProjectGroupBy() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
     queryPlan.groupBy("int");
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("int");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -319,12 +427,12 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanWhereGroupBy() throws DatabaseException, QueryPlanException {
+  public void testSelectGroupBy() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
     queryPlan.groupBy("int");
-    queryPlan.where("int", QueryPlan.PredicateOperator.GREATER_THAN, new IntDataBox(10));
+    queryPlan.select("int", QueryPlan.PredicateOperator.GREATER_THAN, new IntDataBox(10));
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -351,16 +459,16 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSelectWhereGroupBy() throws DatabaseException, QueryPlanException {
+  public void testProjectSelectGroupBy() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
     queryPlan.groupBy("int");
-    queryPlan.where("int", QueryPlan.PredicateOperator.GREATER_THAN, new IntDataBox(10));
+    queryPlan.select("int", QueryPlan.PredicateOperator.GREATER_THAN, new IntDataBox(10));
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("float");
     columnNames.add("int");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -389,7 +497,7 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSelectWhereGroupByJoin() throws DatabaseException, QueryPlanException {
+  public void testProjectSelectGroupByJoin() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     transaction.queryAs(this.defaulTableName, "t1");
 
@@ -397,11 +505,11 @@ public class QueryPlanTest {
 
     queryPlan.join("t1", "int", "int");
     queryPlan.groupBy("t1.int");
-    queryPlan.where(this.defaulTableName + ".int", QueryPlan.PredicateOperator.GREATER_THAN, new IntDataBox(10));
+    queryPlan.select(this.defaulTableName + ".int", QueryPlan.PredicateOperator.GREATER_THAN, new IntDataBox(10));
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("t1.float");
     columnNames.add(this.defaulTableName + ".int");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -430,12 +538,12 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanEmptyWhereResult() throws DatabaseException, QueryPlanException {
+  public void testEmptySelectResult() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
-    queryPlan.where("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS,
-        new IntDataBox(Integer.MAX_VALUE));
+    queryPlan.select("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS,
+            new IntDataBox(Integer.MAX_VALUE));
 
     Iterator<Record> outputIterator = queryPlan.execute();
 
@@ -450,7 +558,7 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanEmptyJoinResult() throws DatabaseException, QueryPlanException {
+  public void testEmptyJoinResult() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
@@ -477,7 +585,71 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanSelectGroupByWithAggregates() throws DatabaseException, QueryPlanException {
+  public void testIndexEqualityLookup() throws DatabaseException, QueryPlanException {
+    List<String> intTableNames = new ArrayList<String>() ;
+    intTableNames.add("int");
+
+    List<DataBox> intTableTypes = new ArrayList<DataBox>();
+    intTableTypes.add(new IntDataBox());
+
+    this.database.createTableWithIndices(new Schema(intTableNames, intTableTypes), "tempIntTable", intTableNames);
+
+    Database.Transaction transaction = this.database.beginTransaction();
+
+    Record record = null;
+    for (int i = 0; i < 100; i++) {
+      List<DataBox> values = new ArrayList<DataBox>();
+      values.add(new IntDataBox(i));
+
+      transaction.addRecord("tempIntTable", values);
+
+      record = new Record(values);
+    }
+
+    QueryPlan queryPlan = transaction.query("tempIntTable");
+    queryPlan.select("int", QueryPlan.PredicateOperator.EQUALS, new IntDataBox(99));
+    Iterator<Record> result = queryPlan.execute();
+
+    assertEquals(record, result.next());
+
+    assertFalse(result.hasNext());
+  }
+
+  @Test
+  public void testUseIndexRangeLookup() throws DatabaseException, QueryPlanException {
+    List<String> intTableNames = new ArrayList<String>() ;
+    intTableNames.add("int");
+
+    List<DataBox> intTableTypes = new ArrayList<DataBox>();
+    intTableTypes.add(new IntDataBox());
+
+    this.database.createTableWithIndices(new Schema(intTableNames, intTableTypes), "tempIntTable", intTableNames);
+
+    Database.Transaction transaction = this.database.beginTransaction();
+
+    for (int i = 0; i < 100; i++) {
+      List<DataBox> values = new ArrayList<DataBox>();
+      values.add(new IntDataBox(i));
+
+      transaction.addRecord("tempIntTable", values);
+    }
+
+    QueryPlan queryPlan = transaction.query("tempIntTable");
+    queryPlan.select("int", QueryPlan.PredicateOperator.GREATER_THAN_EQUALS, new IntDataBox(50));
+    Iterator<Record> result = queryPlan.execute();
+
+    int count = 0;
+    while (result.hasNext()) {
+      assertEquals(count + 50, result.next().getValues().get(0).getInt());
+
+      count++;
+    }
+
+    assertEquals(count, 50);
+  }
+
+  @Test
+  public void testProjectGroupByWithAggregates() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
@@ -488,7 +660,7 @@ public class QueryPlanTest {
 
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("int");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
@@ -512,14 +684,14 @@ public class QueryPlanTest {
   }
 
   @Test(expected = QueryPlanException.class)
-  public void testQueryPlanSelectColumnNotInGroupBy() throws DatabaseException, QueryPlanException {
+  public void testProjectColumnNotInGroupBy() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     QueryPlan queryPlan = transaction.query(this.defaulTableName);
 
     queryPlan.groupBy("int");
     List<String> columns = new ArrayList<String>();
     columns.add("string");
-    queryPlan.select(columns);
+    queryPlan.project(columns);
 
     queryPlan.execute();
 
@@ -527,7 +699,7 @@ public class QueryPlanTest {
   }
 
   @Test
-  public void testQueryPlanQueryAsWithJoin() throws DatabaseException, QueryPlanException {
+  public void testQueryAsWithJoin() throws DatabaseException, QueryPlanException {
     Database.Transaction transaction = this.database.beginTransaction();
     transaction.queryAs(this.defaulTableName, "t1");
     transaction.queryAs(this.defaulTableName, "t2");
@@ -538,7 +710,7 @@ public class QueryPlanTest {
     List<String> columnNames = new ArrayList<String>();
     columnNames.add("t1.int");
     columnNames.add("t2.int");
-    queryPlan.select(columnNames);
+    queryPlan.project(columnNames);
 
     Iterator<Record> recordIterator = queryPlan.execute();
 
