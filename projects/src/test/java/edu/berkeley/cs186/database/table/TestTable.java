@@ -128,15 +128,15 @@ public class TestTable {
     table.updateRecord(input.getValues(), rid);
   }
 
-  @Test
-  @Category(StudentTest.class)
-  public void testCheckAfterRemove() throws DatabaseException {
-    Record input = TestUtils.createRecordWithAllTypes();
-    RecordID rid = table.addRecord(input.getValues());
-    table.updateRecord(input.getValues(), rid);
-    table.deleteRecord(rid);
-    table.callCheck(rid);
-  }
+//  @Test
+//  @Category(StudentTest.class)
+//  public void testCheckAfterRemove() throws DatabaseException {
+//    Record input = TestUtils.createRecordWithAllTypes();
+//    RecordID rid = table.addRecord(input.getValues());
+//    table.updateRecord(input.getValues(), rid);
+//    table.deleteRecord(rid);
+//    table.callCheck(rid);
+//  }
 
   @Test
   public void testTableNumEntries() throws DatabaseException {
